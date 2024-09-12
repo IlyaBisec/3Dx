@@ -1,0 +1,58 @@
+// Определение структуры вершины
+struct Vertex {
+    DirectX::XMFLOAT3 position;
+};
+
+// Создание массива вершин
+Vertex vertices[] = {
+    { DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f) },
+    { DirectX::XMFLOAT3(-1.0f,  1.0f, -1.0f) },
+    { DirectX::XMFLOAT3( 1.0f,  1.0f, -1.0f) },
+    { DirectX::XMFLOAT3( 1.0f, -1.0f, -1.0f) },
+    // Добавьте остальные вершины
+};
+
+// Создание вершинного буфера
+D3D11_BUFFER_DESC bufferDesc = {};
+bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+bufferDesc.ByteWidth = sizeof(vertices);
+bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+D3D11_SUBRESOURCE_DATA initData = {};
+initData.pSysMem = vertices;
+
+ID3D11Buffer* vertexBuffer;
+device->CreateBuffer(&bufferDesc, &initData, &vertexBuffer);
+
+// Установка вершинного буфера
+UINT stride = sizeof(Vertex);
+UINT offset = 0;
+context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+
+// Отрисовка сетки
+context->Draw(ARRAYSIZE(vertices), 0);
+
+
+---------------------------------------------------------------------------
+// Пример кода для создания вершинного буфера
+struct Vertex {
+    DirectX::XMFLOAT3 position;
+    DirectX::XMFLOAT3 normal;
+    DirectX::XMFLOAT2 texCoord;
+};
+
+Vertex vertices[] = {
+    // Определите вершины вашей сетки здесь
+};
+
+D3D11_BUFFER_DESC bufferDesc = {};
+bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+bufferDesc.ByteWidth = sizeof(vertices);
+bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+bufferDesc.CPUAccessFlags = 0;
+
+D3D11_SUBRESOURCE_DATA initData = {};
+initData.pSysMem = vertices;
+
+ID3D11Buffer* vertexBuffer;
+device->CreateBuffer(&bufferDesc, &initData, &vertexBuffer);
