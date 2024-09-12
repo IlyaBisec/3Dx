@@ -27,6 +27,7 @@ ID3D11Buffer *pVBuffer;                // the pointer to the vertex buffer
 // a struct to define a single vertex
 struct VERTEX{FLOAT X, Y, Z; D3DXCOLOR Color;};
 
+
 // function prototypes
 void InitD3D(HWND hWnd);    // sets up and initializes Direct3D
 void RenderFrame(void);     // renders a single frame
@@ -180,6 +181,7 @@ void InitD3D(HWND hWnd)
 
     InitPipeline();
     InitGraphics();
+    
 }
 
 
