@@ -1,5 +1,6 @@
 #pragma once
 #include "3dx_RenderWindow.h"
+#include "Input/3dx_KeyboardClass.h"
 
 class WindowContainer
 {
@@ -8,6 +9,7 @@ public:
 
 protected:
 	RenderWindow renderWindow;
+	InputKeyboardClass keyboard;
 
 private:
 };
