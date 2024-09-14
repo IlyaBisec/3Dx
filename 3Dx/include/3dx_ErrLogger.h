@@ -2,7 +2,7 @@
 #include "3dx_StreamConverter.h"
 #include <Windows.h>
 
-
+// ErrorLogger - the class,which show error message
 class ErrorLogger
 {
 public:

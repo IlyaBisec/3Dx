@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+// StringConverter - the class which convert std::string to wide string
 class StringConverter
 {
 public:
