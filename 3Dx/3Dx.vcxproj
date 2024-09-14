@@ -159,6 +159,8 @@
     <ClInclude Include="include\3dx_RenderWindow.h" />
     <ClInclude Include="include\3dx_StreamConverter.h" />
     <ClInclude Include="include\3dx_WindowContainer.h" />
+    <ClInclude Include="include\Input\3dx_KeyboardClass.h" />
+    <ClInclude Include="include\Input\3dx_KeyboardEvent.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -169,6 +171,8 @@
     <ClCompile Include="src\3dx_RenderWindow.cpp" />
     <ClCompile Include="src\3dx_StreamConverter.cpp" />
     <ClCompile Include="src\3dx_WindowContainer.cpp" />
+    <ClCompile Include="src\input\3dx_KeyboardClass.cpp" />
+    <ClCompile Include="src\input\3dx_KeyboardEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3Dx.rc" />
