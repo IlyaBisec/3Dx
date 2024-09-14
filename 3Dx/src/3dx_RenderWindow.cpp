@@ -1,4 +1,4 @@
-#include "../include/3dx_RenderWindow.h"
+#include "../include/3dx_WindowContainer.h"
 
 bool RenderWindow::initialize(HINSTANCE hInstance, std::string windowTitle, std::string windowClass, int width, int height)
 {
@@ -89,6 +89,48 @@ RenderWindow::~RenderWindow()
 		DestroyWindow(m_handle);
 	}
 }
+
+LRESULT CALLBACK HandleMessageRedirect(HWND hWnd, UINT message, WPARAM param, LPARAM lParam)
+{
+	switch (message)
+	{
+		case WM_CLOSE: 
+			DestroyWindow(hWnd);
+			return 0;
+		default:
+		{
+			// Retrieve ptr to window class
+			WindowContainer *const ptr_window = reinterpret_cast<WindowContainer *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+			// Forward message to window class handler
+			return ptr_window->WindowProc(hWnd, message, param, lParam);
+		}
+	}
+}
+
+LRESULT CALLBACK HandleMessageSetup(HWND hWnd, UINT message, WPARAM param, LPARAM lParam)
+{
+	switch (message)
+	{
+		case WM_NCCREATE:
+		{
+			const CREATESTRUCTW *const ptr_create = reinterpret_cast<CREATESTRUCTW *>(lParam);
+			WindowContainer *ptr_wndContainer = reinterpret_cast<WindowContainer *>(ptr_create->lpCreateParams);
+			// Sanity check
+			if(ptr_wndContainer == nullptr)
+			{
+				ErrorLogger::log("Critical Error: Pointer to window container is null during WN_NCCREATE");
+				exit(-1);
+			}
+
+			SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(ptr_wndContainer));
+			SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HandleMessageRedirect));
+			return ptr_wndContainer->WindowProc(hWnd, message, param, lParam);
+		}
+		default:
+			return DefWindowProc(hWnd, message, param, lParam);
+	}
+}
+
 
 void RenderWindow::registerWindow()
 {
