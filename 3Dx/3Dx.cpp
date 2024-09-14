@@ -56,7 +56,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	engine.initialize(hInstance, "3Dx Editor", "3DxEditorClass", 500, 500);
 	while (engine.processMessages() == true)
 	{
-		engine.update();
+		engine.update(); // Не выводит в вывод нажатую клавишу, нужно пробежаться и проверить код
 	}
 
 	return 0;
