@@ -7,7 +7,7 @@
 
 #include <DirectXMath.h>
 
-#include "include/3dx_RenderWindow.h"
+#include "include/3dx_Engine.h"
 
 // include the Direct3D Library file
 #pragma comment (lib, "d3d11.lib")
@@ -52,9 +52,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR lpCmdLine,
 	_In_ int cmdShow)
 {
-	RenderWindow window;
-	window.initialize(hInstance, "3Dx Editor", "3DxEditorClass", 500, 500);
-	while (window.processMessages() == true)
+	DxEngine engine;
+	engine.initialize(hInstance, "3Dx Editor", "3DxEditorClass", 500, 500);
+	while (engine.processMessages() == true)
 	{
 
 	}
