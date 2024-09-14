@@ -7,7 +7,7 @@
 
 #include <DirectXMath.h>
 
-#include "include/3dx_ErrLogger.h"
+#include "include/3dx_RenderWindow.h"
 
 // include the Direct3D Library file
 #pragma comment (lib, "d3d11.lib")
@@ -52,11 +52,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR lpCmdLine,
 	_In_ int cmdShow)
 {
-	HRESULT hResult = S_OK;
-	if (SUCCEEDED(hResult))
-		MessageBoxA(NULL, "SUCCESS", "SUCCESS", NULL);
-	if (FAILED(hResult))
-		ErrorLogger::log(hResult, "FAILURE");
+	RenderWindow window;
+	window.initialize(hInstance, "3Dx Editor", "3DxEditorClass", 500, 500);
+	while (window.processMessages() == true)
+	{
+
+	}
 
 	return 0;
 }
