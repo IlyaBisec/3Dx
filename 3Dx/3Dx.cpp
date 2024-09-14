@@ -56,7 +56,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	engine.initialize(hInstance, "3Dx Editor", "3DxEditorClass", 500, 500);
 	while (engine.processMessages() == true)
 	{
-
+		engine.update();
 	}
 
 	return 0;
