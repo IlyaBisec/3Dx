@@ -1,6 +1,6 @@
 #include "../include/3dx_WindowContainer.h"
 
-bool RenderWindow::initialize(HINSTANCE hInstance, std::string windowTitle, std::string windowClass, int width, int height)
+bool RenderWindow::initialize(WindowContainer *ptr_WindowContainer, HINSTANCE hInstance, std::string windowTitle, std::string windowClass, int width, int height)
 {
 	this->m_hInstance = hInstance;
 	this->m_width = width;
@@ -79,6 +79,11 @@ bool RenderWindow::processMessages()
 	}
 
 	return true;
+}
+
+HWND RenderWindow::getHWND() const
+{
+	return this->m_handle;
 }
 
 RenderWindow::~RenderWindow()
