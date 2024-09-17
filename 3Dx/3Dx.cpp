@@ -44,6 +44,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	while (engine.processMessages() == true)
 	{
 		engine.update();
+		engine.renderFrame();
 	}
 
 	return 0;
