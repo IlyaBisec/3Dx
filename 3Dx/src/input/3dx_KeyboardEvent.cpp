@@ -1,30 +1,30 @@
 #include "../../include/Input/3dx_KeyboardEvent.h"
 
-KeyboardEvent::KeyboardEvent() : m_etype(EEventType::tInvalid), m_key(0u)
+DxKeyboardEvent::DxKeyboardEvent() : m_etype(EKbEventType::tInvalid), m_key(0u)
 {
 
 }
 
-KeyboardEvent::KeyboardEvent(const EEventType etype, const UCH key) : m_etype(etype), m_key(key)
+DxKeyboardEvent::DxKeyboardEvent(const EKbEventType etype, const UCH key) : m_etype(etype), m_key(key)
 {
 }
 
-bool KeyboardEvent::isPress() const
+bool DxKeyboardEvent::isPress() const
 {
-	return this->m_etype == EEventType::tPress;
+	return this->m_etype == EKbEventType::tPress;
 }
 
-bool KeyboardEvent::isRelease() const
+bool DxKeyboardEvent::isRelease() const
 {
-	return this->m_etype == EEventType::tRelease;
+	return this->m_etype == EKbEventType::tRelease;
 }
 
-bool KeyboardEvent::isValid() const
+bool DxKeyboardEvent::isValid() const
 {
-	return this->m_etype != EEventType::tInvalid;
+	return this->m_etype != EKbEventType::tInvalid;
 }
 
-UCH KeyboardEvent::getKeyCode() const
+UCH DxKeyboardEvent::getKeyCode() const
 {
 	return this->m_key;
 }
