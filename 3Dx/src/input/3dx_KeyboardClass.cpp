@@ -24,20 +24,20 @@ bool InputKeyboardClass::charBufferIsEmpty()
 	return this->m_charBuffer.empty();
 }
 
-KeyboardEvent InputKeyboardClass::readKey()
+DxKeyboardEvent InputKeyboardClass::readKey()
 {
 	// If no keys to be read?
 	if(this->m_keyBuffer.empty())
 	{
 		// Return empty keyboard event
-		return KeyboardEvent(); 
+		return DxKeyboardEvent(); 
 	}
 	else
 	{
 		// Get first keyboard Event from queue
 		// Remove first item from queue
 		// And returns keyboard event
-		KeyboardEvent keybEvent = this->m_keyBuffer.front();
+		DxKeyboardEvent keybEvent = this->m_keyBuffer.front();
 		this->m_keyBuffer.pop();
 		return keybEvent;
 	}
@@ -64,13 +64,13 @@ UCH InputKeyboardClass::readChar()
 void InputKeyboardClass::onKeyPressed(const UCH key)
 {
 	this->m_keyStates[key] = true;
-	this->m_keyBuffer.push(KeyboardEvent(KeyboardEvent::EEventType::tPress, key));
+	this->m_keyBuffer.push(DxKeyboardEvent(DxKeyboardEvent::EKbEventType::tPress, key));
 }
 
 void InputKeyboardClass::onKeyReleased(const UCH key)
 {
 	this->m_keyStates[key] = false;
-	this->m_keyBuffer.push(KeyboardEvent(KeyboardEvent::EEventType::tRelease, key));
+	this->m_keyBuffer.push(DxKeyboardEvent(DxKeyboardEvent::EKbEventType::tRelease, key));
 }
 
 void InputKeyboardClass::onChar(const UCH key)
