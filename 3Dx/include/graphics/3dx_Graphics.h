@@ -11,6 +11,7 @@ class DxGraphics
 {
 public:
 	bool initialize(HWND hWnd, int width, int height);
+	void renderFrame();
 
 private:
 	bool initializeDirectX(HWND hWnd, int width, int height);
