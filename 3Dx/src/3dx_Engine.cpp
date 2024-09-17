@@ -67,3 +67,8 @@ void DxEngine::update()
 		}*/
 	}
 }
+
+void DxEngine::renderFrame()
+{
+	this->graphics.renderFrame();
+}
