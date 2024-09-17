@@ -12,7 +12,7 @@ public:
 	bool keyBufferIsEmpty();
 	bool charBufferIsEmpty();
 
-	KeyboardEvent readKey();
+	DxKeyboardEvent readKey();
 	UCH readChar();
 
 	void onKeyPressed(const UCH key);
@@ -32,6 +32,6 @@ private:
 	bool m_autoRepeatChars = false;
 	bool m_keyStates[256];
 
-	std::queue<KeyboardEvent> m_keyBuffer;
+	std::queue<DxKeyboardEvent> m_keyBuffer;
 	std::queue<UCH> m_charBuffer;
 };
