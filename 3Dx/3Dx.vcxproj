@@ -153,7 +153,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="3Dx.h" />
-    <ClInclude Include="framework.h" />
     <ClInclude Include="include\3dx_Engine.h" />
     <ClInclude Include="include\3dx_ErrLogger.h" />
     <ClInclude Include="include\3dx_RenderWindow.h" />
@@ -161,12 +160,13 @@
     <ClInclude Include="include\3dx_WindowContainer.h" />
     <ClInclude Include="include\graphics\3dx_AdapterReader.h" />
     <ClInclude Include="include\graphics\3dx_Graphics.h" />
+    <ClInclude Include="include\graphics\3dx_Shaders.h" />
+    <ClInclude Include="include\graphics\3dx_Vertex.h" />
     <ClInclude Include="include\Input\3dx_KeyboardClass.h" />
     <ClInclude Include="include\Input\3dx_KeyboardEvent.h" />
     <ClInclude Include="include\Input\3dx_MouseClass.h" />
     <ClInclude Include="include\Input\3dx_MouseEvent.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3Dx.cpp" />
@@ -177,13 +177,11 @@
     <ClCompile Include="src\3dx_WindowContainer.cpp" />
     <ClCompile Include="src\graphics\3dx_AdapterReader.cpp" />
     <ClCompile Include="src\graphics\3dx_Graphics.cpp" />
+    <ClCompile Include="src\graphics\3dx_Shaders.cpp" />
     <ClCompile Include="src\input\3dx_KeyboardClass.cpp" />
     <ClCompile Include="src\input\3dx_KeyboardEvent.cpp" />
     <ClCompile Include="src\input\3dx_MouseClass.cpp" />
     <ClCompile Include="src\input\3dx_MouseEvent.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="3Dx.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="3Dx.ico" />
@@ -191,6 +189,21 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="classicWin32.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3Dx.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\3dx_VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="resource.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="3Dx.h">
@@ -58,6 +52,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\graphics\3dx_Graphics.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\3dx_Vertex.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics\3dx_Shaders.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
@@ -98,11 +98,9 @@
     <ClCompile Include="src\graphics\3dx_AdapterReader.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="3Dx.rc">
-      <Filter>Файлы ресурсов</Filter>
-    </ResourceCompile>
+    <ClCompile Include="src\graphics\3dx_Shaders.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -114,5 +112,13 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="classicWin32.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3Dx.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\3dx_VertexShader.hlsl" />
   </ItemGroup>
 </Project>
