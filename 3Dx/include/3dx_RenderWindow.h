@@ -1,13 +1,17 @@
 #pragma once
 #include "3dx_ErrLogger.h"
 
+class WindowContainer;
+
 // RenderWindow - the class that displays the 3Dx editor window
 class RenderWindow
 {
 public:
-	bool initialize(HINSTANCE hInstance, std::string windowTitle,
+	bool initialize(WindowContainer *ptr_WindowContainer, HINSTANCE hInstance, std::string windowTitle,
 		std::string windowClass, int width, int height);
 	bool processMessages();
+
+	HWND getHWND() const;
 
 	~RenderWindow();
 private:
