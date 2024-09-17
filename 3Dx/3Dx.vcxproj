@@ -159,8 +159,12 @@
     <ClInclude Include="include\3dx_RenderWindow.h" />
     <ClInclude Include="include\3dx_StreamConverter.h" />
     <ClInclude Include="include\3dx_WindowContainer.h" />
+    <ClInclude Include="include\graphics\3dx_AdapterReader.h" />
+    <ClInclude Include="include\graphics\3dx_Graphics.h" />
     <ClInclude Include="include\Input\3dx_KeyboardClass.h" />
     <ClInclude Include="include\Input\3dx_KeyboardEvent.h" />
+    <ClInclude Include="include\Input\3dx_MouseClass.h" />
+    <ClInclude Include="include\Input\3dx_MouseEvent.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -171,8 +175,12 @@
     <ClCompile Include="src\3dx_RenderWindow.cpp" />
     <ClCompile Include="src\3dx_StreamConverter.cpp" />
     <ClCompile Include="src\3dx_WindowContainer.cpp" />
+    <ClCompile Include="src\graphics\3dx_AdapterReader.cpp" />
+    <ClCompile Include="src\graphics\3dx_Graphics.cpp" />
     <ClCompile Include="src\input\3dx_KeyboardClass.cpp" />
     <ClCompile Include="src\input\3dx_KeyboardEvent.cpp" />
+    <ClCompile Include="src\input\3dx_MouseClass.cpp" />
+    <ClCompile Include="src\input\3dx_MouseEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3Dx.rc" />
