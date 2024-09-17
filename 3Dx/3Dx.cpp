@@ -1,19 +1,6 @@
-﻿// include the basic windows header files and the Direct3D header files
-#include <windows.h>
-#include <windowsx.h>
-#include <d3d11.h>
-#include <d3dx11.h>
-#include <d3dx10.h>
-
-#include <DirectXMath.h>
+﻿// Entry point to the 3dx program
 
 #include "include/3dx_Engine.h"
-
-// include the Direct3D Library file
-#pragma comment (lib, "d3d11.lib")
-#pragma comment (lib, "d3dx11.lib")
-#pragma comment (lib, "d3dx10.lib")
-#pragma comment (lib, "DirectXTK.lib")
 
 //// define the screen resolution
 //#define SCREEN_WIDTH  800
@@ -56,7 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	engine.initialize(hInstance, "3Dx Editor", "3DxEditorClass", 500, 500);
 	while (engine.processMessages() == true)
 	{
-		engine.update(); // Не выводит в вывод нажатую клавишу, нужно пробежаться и проверить код
+		engine.update();
 	}
 
 	return 0;
