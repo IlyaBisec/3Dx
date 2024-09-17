@@ -3,16 +3,16 @@
 typedef unsigned char UCH;
 
 // KeyboardEvent - a class that contains keyboard events
-class KeyboardEvent
+class DxKeyboardEvent
 {
 public:
-	enum EEventType
+	enum EKbEventType
 	{
 		tPress, tRelease, tInvalid
 	};
 
-	KeyboardEvent();
-	KeyboardEvent(const EEventType etype, const UCH key);
+	DxKeyboardEvent();
+	DxKeyboardEvent(const EKbEventType etype, const UCH key);
 
 	bool isPress() const;
 	bool isRelease() const;
@@ -21,6 +21,6 @@ public:
 	UCH getKeyCode() const;
 
 private:
-	EEventType m_etype;
+	EKbEventType m_etype;
 	UCH m_key;
 };
