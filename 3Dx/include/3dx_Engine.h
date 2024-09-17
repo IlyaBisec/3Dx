@@ -8,4 +8,5 @@ public:
 	bool processMessages();
 
 	void update();
+	void renderFrame();
 };
