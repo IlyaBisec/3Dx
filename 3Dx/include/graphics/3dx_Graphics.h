@@ -3,6 +3,7 @@
 #define _3DX_GRAPHICS_H_
 
 #include "3dx_AdapterReader.h"
+#include "3dx_Shaders.h"
 
 namespace MWRL =  Microsoft::WRL;
 
@@ -23,7 +24,10 @@ private:
 	MWRL::ComPtr<ID3D11RenderTargetView> m_renderTargetView;
 
 	MWRL::ComPtr<ID3D11InputLayout> m_inputLayout;
+
 	MWRL::ComPtr<ID3D10Blob> m_vertexBuffer;
+
+	VertexShader m_vertexShader;
 };
 
 #endif // !_3DX_GRAPHICS_H_
