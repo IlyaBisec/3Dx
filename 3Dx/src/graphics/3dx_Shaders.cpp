@@ -3,6 +3,7 @@
 bool VertexShader::initialize(MWRL::ComPtr<ID3D11Device> &device, std::wstring shaderPath)
 {
 	HRESULT hResult = D3DReadFileToBlob(shaderPath.c_str(), this->m_shaderBuffer.GetAddressOf());
+	
 	if (FAILED(hResult))
 	{
 		std::wstring errorMsg = L"Failed to load shader: ";
