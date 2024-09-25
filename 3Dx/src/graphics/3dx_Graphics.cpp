@@ -16,7 +16,7 @@ bool DxGraphics::initialize(HWND hWnd, int width, int height)
 
 void DxGraphics::renderFrame()
 {
-	float backgraundColor[] = { 0.0f, 0.0f, 1.0f, 1.0f };
+	float backgraundColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	this->m_deviceContext->ClearRenderTargetView(this->m_renderTargetView.Get(), backgraundColor);
 
 	this->m_deviceContext->IASetInputLayout(this->m_vertexShader.getInputLayout());
@@ -142,11 +142,8 @@ bool DxGraphics::initializeShaders()
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
-		{
-			"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, 0,
-			D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0
-		},
-
+		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA,0},
 	};
 
 	UINT numElements = ARRAYSIZE(layout);
@@ -168,9 +165,9 @@ bool DxGraphics::initializeScene()
 {
 	Vertex vertex[] =
 	{
-		Vertex(0.0f, -0.1f), // Center point
-		Vertex(-0.1f, 0.0f), // Left point
-		Vertex(0.1f, 0.0f), // Right point
+		Vertex(-0.5f,-0.5f,1.0f,0.0f,0.0f), // Bottom Left Red Point
+		Vertex(0.0f,0.5f,0.0f,1.0f,0.0f), // Top Middle Green Point
+		Vertex(0.5f,-0.5f,0.0f,0.0f,1.0f), // Bottom Right Blue Point
 	};
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
