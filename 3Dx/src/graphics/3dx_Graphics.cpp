@@ -94,25 +94,19 @@ bool DxGraphics::initializeShaders()
 {
 	std::wstring shaderFolder;
 
-#ifndef _DEBUG // Debug mode
-	#ifdef _WIN64 // x64
-		shaderFolder = L"..\\x64\\Debug\\shaders\\";
-	#else // x86 Win32
-		shaderFolder = L"..\\Debug\\shaders\\";
-#endif // _WIN64
-#else // Release mode
-	#ifdef _WIN64 // x64
-		shaderFolder = L"..\\x64\\Release\\shaders\\";
-	#else // x86 Win32
-		shaderFolder = L"..\\Release\\shaders\\";
+#ifdef _DEBUG //Debug Mode
+	#ifdef _WIN64 //x64
+			shaderFolder = L"..\\x64\\Debug\\shaders\\";
+	#else  //x86 (Win32)
+			shaderFolder = L"..\\Debug\\shaders\\";
 	#endif
-#endif // !_DEBUG // Debug mode
-
-
-	if(!m_vertexShader.initialize(this->m_device, L"..\\Debug\\shaders\\3dx_VertexShader.cso"))
-	{
-		return false;
-	}
+	#else //Release Mode
+	#ifdef _WIN64 //x64
+			shaderFolder = L"..\\x64\\Release\\shaders\\";
+	#else  //x86 (Win32)
+			shaderFolder = L"..\\Release\\shaders\\";
+	#endif
+#endif
 
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -126,13 +120,8 @@ bool DxGraphics::initializeShaders()
 
 	UINT numElements = ARRAYSIZE(layout);
 
-	HRESULT hResult =  this->m_device->CreateInputLayout(layout, numElements, 
-		this->m_vertexShader.getBuffer()->GetBufferPointer(), this->m_vertexShader.getBuffer()->GetBufferSize(), 
-		this->m_inputLayout.GetAddressOf());
-
-	if(FAILED(hResult))
+	if(!m_vertexShader.initialize(this->m_device, shaderFolder + L"3dx_VertexShader.cso", layout, numElements))
 	{
-		ErrorLogger::log(hResult, "Failed to create input layout");
 		return false;
 	}
 
