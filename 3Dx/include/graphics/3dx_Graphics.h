@@ -25,8 +25,6 @@ private:
 
 	MWRL::ComPtr<ID3D11InputLayout> m_inputLayout;
 
-	MWRL::ComPtr<ID3D10Blob> m_vertexBuffer;
-
 	VertexShader m_vertexShader;
 };
 
