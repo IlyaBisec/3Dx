@@ -26,6 +26,7 @@ private:
 	MWRL::ComPtr<ID3D11InputLayout> m_inputLayout;
 
 	VertexShader m_vertexShader;
+	PixelShader  m_pixelShader;
 };
 
 #endif // !_3DX_GRAPHICS_H_

@@ -27,5 +27,17 @@ private:
 	MWRL::ComPtr<ID3D11InputLayout> m_inputLayout;
 };
 
+class PixelShader
+{
+public:
+	bool initialize(MWRL::ComPtr<ID3D11Device> &device, std::wstring shaderPath);
+	ID3D11PixelShader *getShader();
+	ID3D10Blob *getBuffer();
+
+private:
+	MWRL::ComPtr<ID3D11PixelShader> m_shader;
+	MWRL::ComPtr<ID3D10Blob> m_shaderBuffer;
+};
+
 
 #endif // !_3DX_SHADERS_H_
