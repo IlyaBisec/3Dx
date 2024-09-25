@@ -15,13 +15,16 @@ namespace MWRL = Microsoft::WRL;
 class VertexShader
 {
 public:
-	bool initialize(MWRL::ComPtr<ID3D11Device> &device, std::wstring shaderPath);
+	bool initialize(MWRL::ComPtr<ID3D11Device> &device, std::wstring shaderPath, 
+		D3D11_INPUT_ELEMENT_DESC *layoutDesc, UINT numElements);
 	ID3D11VertexShader *getShader();
 	ID3D10Blob *getBuffer();
+	ID3D11InputLayout *getInputLayout();
 
 private:
 	MWRL::ComPtr<ID3D11VertexShader> m_shader;
 	MWRL::ComPtr<ID3D10Blob> m_shaderBuffer;
+	MWRL::ComPtr<ID3D11InputLayout> m_inputLayout;
 };
 
 
