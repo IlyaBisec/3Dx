@@ -1,4 +1,4 @@
-﻿// Entry point to the 3dx program 11
+﻿// Entry point to the 3dx program 1
 
 #include "include/3dx_Engine.h"
 
