@@ -4,6 +4,7 @@
 
 #include "3dx_AdapterReader.h"
 #include "3dx_Shaders.h"
+#include "3dx_Vertex.h"
 
 namespace MWRL =  Microsoft::WRL;
 
@@ -17,13 +18,14 @@ public:
 private:
 	bool initializeDirectX(HWND hWnd, int width, int height);
 	bool initializeShaders();
+	bool initializeScene();
 
 	MWRL::ComPtr<ID3D11Device> m_device;
 	MWRL::ComPtr<ID3D11DeviceContext> m_deviceContext;
 	MWRL::ComPtr<IDXGISwapChain> m_swapChain;
 	MWRL::ComPtr<ID3D11RenderTargetView> m_renderTargetView;
 
-	MWRL::ComPtr<ID3D11InputLayout> m_inputLayout;
+	MWRL::ComPtr<ID3D11Buffer> m_vertexBuffer;
 
 	VertexShader m_vertexShader;
 	PixelShader  m_pixelShader;

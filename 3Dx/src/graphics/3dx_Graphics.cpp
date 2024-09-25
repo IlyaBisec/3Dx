@@ -8,6 +8,9 @@ bool DxGraphics::initialize(HWND hWnd, int width, int height)
 	if (!initializeShaders())
 		return false;
 
+	if (!initializeScene())
+		return false;
+
 	return true;
 }
 
@@ -15,6 +18,19 @@ void DxGraphics::renderFrame()
 {
 	float backgraundColor[] = { 0.0f, 0.0f, 1.0f, 1.0f };
 	this->m_deviceContext->ClearRenderTargetView(this->m_renderTargetView.Get(), backgraundColor);
+
+	this->m_deviceContext->IASetInputLayout(this->m_vertexShader.getInputLayout());
+	this->m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	this->m_deviceContext->VSSetShader(m_vertexShader.getShader(), NULL, 0);
+	this->m_deviceContext->PSSetShader(m_pixelShader.getShader(), NULL, 0);
+
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+
+	this->m_deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
+	this->m_deviceContext->Draw(3, 0);
+
 	this->m_swapChain->Present(1, NULL);
 }
 
@@ -144,6 +160,39 @@ bool DxGraphics::initializeShaders()
 	{
 		return false;
 	}
+
+	return true;
+}
+
+bool DxGraphics::initializeScene()
+{
+	Vertex vertex[] =
+	{
+		Vertex(0.0f, -0.1f), // Center point
+		Vertex(-0.1f, 0.0f), // Left point
+		Vertex(0.1f, 0.0f), // Right point
+	};
+
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * ARRAYSIZE(vertex);
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = vertex;
+
+	HRESULT hResult = this->m_device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, this->m_vertexBuffer.GetAddressOf());
+	if(FAILED(hResult))
+	{
+		ErrorLogger::log(hResult, "Failed to create vertex buffer");
+		return false;
+	}
+
 
 	return true;
 }
