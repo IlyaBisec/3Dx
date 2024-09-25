@@ -86,28 +86,43 @@ bool DxGraphics::initializeDirectX(HWND hWnd, int width, int height)
 
 	this->m_deviceContext->OMSetRenderTargets(1, this->m_renderTargetView.GetAddressOf(), NULL);
 
+	// Create the viewport
+	D3D11_VIEWPORT viewport;
+	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
+
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = width;
+	viewport.Height = height;
+
+	// Set the viewport
+	this->m_deviceContext->RSSetViewports(1, &viewport);
+
 
 	return true;
 }
 
 bool DxGraphics::initializeShaders()
 {
-	std::wstring shaderFolder;
+	std::wstring shaderFolder = L"";
 
+#pragma region DetermineShaderPath
+	if (IsDebuggerPresent() == TRUE)
+	{
 #ifdef _DEBUG //Debug Mode
-	#ifdef _WIN64 //x64
-			shaderFolder = L"..\\x64\\Debug\\shaders\\";
-	#else  //x86 (Win32)
-			shaderFolder = L"..\\Debug\\shaders\\";
-	#endif
-	#else //Release Mode
-	#ifdef _WIN64 //x64
-			shaderFolder = L"..\\x64\\Release\\shaders\\";
-	#else  //x86 (Win32)
-			shaderFolder = L"..\\Release\\shaders\\";
-	#endif
+#ifdef _WIN64 //x64
+		shaderFolder = L"..\\x64\\Debug\\";
+#else  //x86 (Win32)
+		shaderFolder = L"..\\Debug\\";
 #endif
-
+#else //Release Mode
+#ifdef _WIN64 //x64
+		shaderFolder = L"..\\x64\\Release\\";
+#else  //x86 (Win32)
+		shaderFolder = L"..\\Release\\";
+#endif
+#endif
+	}
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -120,7 +135,12 @@ bool DxGraphics::initializeShaders()
 
 	UINT numElements = ARRAYSIZE(layout);
 
-	if(!m_vertexShader.initialize(this->m_device, shaderFolder + L"3dx_VertexShader.cso", layout, numElements))
+	if(!m_vertexShader.initialize(this->m_device, shaderFolder + L"shaders\\3dx_VertexShader.cso", layout, numElements))
+	{
+		return false;
+	}
+
+	if(!m_pixelShader.initialize(this->m_device, shaderFolder + L"shaders\\3dx_PixelShader.cso"))
 	{
 		return false;
 	}
