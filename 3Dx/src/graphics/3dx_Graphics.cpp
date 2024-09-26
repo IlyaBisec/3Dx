@@ -16,11 +16,15 @@ bool DxGraphics::initialize(HWND hWnd, int width, int height)
 
 void DxGraphics::renderFrame()
 {
-	float backgraundColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float backgraundColor[] = { 0.0f, 0.0f, 0.0f, 1.0f }; // Black
 	this->m_deviceContext->ClearRenderTargetView(this->m_renderTargetView.Get(), backgraundColor);
+	this->m_deviceContext->ClearDepthStencilView(this->m_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
 
 	this->m_deviceContext->IASetInputLayout(this->m_vertexShader.getInputLayout());
 	this->m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	this->m_deviceContext->RSSetState(this->m_rasterizerState.Get());
+	this->m_deviceContext->OMSetDepthStencilState(this->m_depthStencilState.Get(), 0);
 
 	this->m_deviceContext->VSSetShader(m_vertexShader.getShader(), NULL, 0);
 	this->m_deviceContext->PSSetShader(m_pixelShader.getShader(), NULL, 0);
@@ -28,8 +32,20 @@ void DxGraphics::renderFrame()
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
+	// Red trinagle
 	this->m_deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
 	this->m_deviceContext->Draw(3, 0);
+
+	// Green triangle
+	this->m_deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer2.GetAddressOf(), &stride, &offset);
+	this->m_deviceContext->Draw(3, 0);
+
+	// Draw text
+	/*m_spriteBatch->Begin();
+	m_spriteFont->DrawString(m_spriteBatch.get(), L"HEY", DirectX::XMFLOAT2(0, 0), DirectX::Colors::White, 0.0f,
+		DirectX::XMFLOAT2(0.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 1.0f));
+	m_spriteBatch->End();*/
+
 
 	this->m_swapChain->Present(1, NULL);
 }
@@ -96,11 +112,55 @@ bool DxGraphics::initializeDirectX(HWND hWnd, int width, int height)
 	hResult = this->m_device->CreateRenderTargetView(backBuffer.Get(), NULL, this->m_renderTargetView.GetAddressOf());
 	if (FAILED(hResult)) //If error occurred
 	{
-		ErrorLogger::log(hResult, "Failed to create render target view.");
+		ErrorLogger::log(hResult, "Failed to create render target view");
 		return false;
 	}
 
-	this->m_deviceContext->OMSetRenderTargets(1, this->m_renderTargetView.GetAddressOf(), NULL);
+	// Describe our depth/Stencil buffer
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	depthStencilDesc.Width = width;
+	depthStencilDesc.Height = height;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.SampleDesc.Quality = 0;
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0;
+	depthStencilDesc.MiscFlags = 0;
+
+
+	hResult = this->m_device->CreateTexture2D(&depthStencilDesc, NULL, this->m_depthStencilBuffer.GetAddressOf());
+	if (FAILED(hResult)) //If error occurred
+	{
+		ErrorLogger::log(hResult, "Failed to create depth stencil buffer");
+		return false;
+	}
+
+	hResult = this->m_device->CreateDepthStencilView(this->m_depthStencilBuffer.Get(), NULL, this->m_depthStencilView.GetAddressOf());
+	if (FAILED(hResult)) //If error occurred
+	{
+		ErrorLogger::log(hResult, "Failed to create depth stencil view");
+		return false;
+	}
+
+	this->m_deviceContext->OMSetRenderTargets(1, this->m_renderTargetView.GetAddressOf(), this->m_depthStencilView.Get());
+
+	// Create depth stencil state
+	D3D11_DEPTH_STENCIL_DESC _depthstencildesc;
+	ZeroMemory(&_depthstencildesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+
+	_depthstencildesc.DepthEnable = true;
+	_depthstencildesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
+	_depthstencildesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
+
+	hResult = this->m_device->CreateDepthStencilState(&_depthstencildesc, this->m_depthStencilState.GetAddressOf());
+	if (FAILED(hResult)) //If error occurred
+	{
+		ErrorLogger::log(hResult, "Failed to create depth stencil state");
+		return false;
+	}
 
 	// Create the viewport
 	D3D11_VIEWPORT viewport;
@@ -110,9 +170,28 @@ bool DxGraphics::initializeDirectX(HWND hWnd, int width, int height)
 	viewport.TopLeftY = 0;
 	viewport.Width = width;
 	viewport.Height = height;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+
 
 	// Set the viewport
 	this->m_deviceContext->RSSetViewports(1, &viewport);
+
+	// Create Rasterizer state(viewport window)
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+	ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+
+	rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID; // Wireframe or solid viewport here
+	rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;  // Back facing
+	hResult = this->m_device->CreateRasterizerState(&rasterizerDesc, this->m_rasterizerState.GetAddressOf());
+	if (FAILED(hResult))
+	{
+		ErrorLogger::log(hResult, "Failed to create rasterizer state");
+		return false;
+	}
+
+	/*m_spriteBatch = std::make_unique<DirectX::SpriteBatch>(this->m_deviceContext.Get());
+	m_spriteFont = std::make_unique<DirectX::SpriteFont>(this->m_device.Get(), L"data\\fonts\\comic_sans_ms_16.spritefont");*/
 
 
 	return true;
@@ -142,7 +221,7 @@ bool DxGraphics::initializeShaders()
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA,0},
 	};
 
@@ -163,11 +242,12 @@ bool DxGraphics::initializeShaders()
 
 bool DxGraphics::initializeScene()
 {
+	// Red trinagle
 	Vertex vertex[] =
 	{
-		Vertex(-0.5f,-0.5f,1.0f,0.0f,0.0f), // Bottom Left Red Point
-		Vertex(0.0f,0.5f,0.0f,1.0f,0.0f), // Top Middle Green Point
-		Vertex(0.5f,-0.5f,0.0f,0.0f,1.0f), // Bottom Right Blue Point
+		Vertex(-0.5f,  -0.5f, 1.0f, 1.0f, 0.0f, 0.0f), // Bottom Left 
+		Vertex( 0.0f,   0.5f, 1.0f, 1.0f, 0.0f, 0.0f), // Top Middle
+		Vertex( 0.5f,  -0.5f, 1.0f, 1.0f, 0.0f, 0.0f), // Bottom Right 
 	};
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
@@ -185,6 +265,32 @@ bool DxGraphics::initializeScene()
 
 	HRESULT hResult = this->m_device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, this->m_vertexBuffer.GetAddressOf());
 	if(FAILED(hResult))
+	{
+		ErrorLogger::log(hResult, "Failed to create vertex buffer");
+		return false;
+	}
+
+	// Green trinagle
+	Vertex vertex_g[] =
+	{
+		Vertex(-0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f), // Bottom Left 
+		Vertex( 0.00f,  0.25f, 0.0f, 0.0f, 1.0f, 0.0f), // Top Middle
+		Vertex( 0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f), // Bottom Right 
+	};
+
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * ARRAYSIZE(vertex_g);
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = vertex_g;
+
+	hResult = this->m_device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, this->m_vertexBuffer2.GetAddressOf());
+	if (FAILED(hResult))
 	{
 		ErrorLogger::log(hResult, "Failed to create vertex buffer");
 		return false;
